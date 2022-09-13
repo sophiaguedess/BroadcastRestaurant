@@ -1,0 +1,34 @@
+package BR;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+import java.awt.Color;
+import java.awt.Container;
+public class COZINHA extends JFrame {
+
+	
+	public COZINHA() {
+		super("COZINHA");
+		Container cozi = getContentPane();
+		JLabel label = new JLabel("guia da cozinha");
+		
+		setVisible(true);
+		getContentPane().setBackground((Color.WHITE));
+		
+		cozi.add(label);
+		
+		label.setBounds(30,80,150,20);
+
+		
+		setBounds(100, 100, 300, 300);
+	}
+	
+	public static void main(String[] args) {
+		COZINHA cozinha = new COZINHA();
+		//cozinha.setVisible(true);
+		cozinha.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+	}
+
+}
