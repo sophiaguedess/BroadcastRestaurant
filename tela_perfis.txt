@@ -1,0 +1,73 @@
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+
+public class Alternar_Tela extends JFrame{
+	
+	public Alternar_Tela() {
+		super("BroadCast Restaurant");
+		Container at = getContentPane();
+		setVisible(true);
+		setBounds(100, 100, 450, 300);
+		getContentPane().setBackground((Color.WHITE));
+		
+		JButton botaoCozinha = new JButton("Cozinha");
+		JButton botaoSalao = new JButton("Salao");
+		
+		
+		FlowLayout l = new FlowLayout();
+		
+		at.setLayout(l);
+		
+		at.add(botaoSalao);
+		at.add(botaoCozinha);
+	
+		
+		setBounds(100, 100, 300, 300);
+
+		
+	    Ativabotao eventoS = new Ativabotao();
+		
+		botaoSalao.addActionListener(eventoS); 
+		
+		AcionaBotao eventoC = new AcionaBotao();
+		
+		botaoCozinha.addActionListener(eventoC);
+		
+	}
+	
+	private class AcionaBotao implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent eventoC) {
+			
+			COZINHA cozinha = new COZINHA();
+			cozinha.setVisible(true);
+			dispose();
+			
+		}
+		
+	}
+	
+	private class Ativabotao implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent eventoS) {
+			
+			SALAO salao = new SALAO();
+			salao.setVisible(true);
+			dispose();
+			
+		}
+		
+	}
+	
+	public static void main(String[] args) {
+		Alternar_Tela guia = new Alternar_Tela();
+	
+		guia.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
