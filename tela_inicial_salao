@@ -1,0 +1,37 @@
+package BR;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+import java.awt.Color;
+import java.awt.Container;
+public class SALAO extends JFrame {
+
+	
+	public SALAO() {
+		super("SALAO");
+		Container sal = getContentPane();
+		JLabel label = new JLabel("guia do salao");
+		
+		setVisible(true);
+		getContentPane().setBackground((Color.WHITE));
+		
+		
+		sal.add(label);
+		
+		label.setBounds(30,80,150,20);
+
+		//100, 100, 450, 300
+		setBounds(100, 100, 300, 300);
+		setVisible(true);
+		//setSize();
+	}
+	
+	public static void main(String[] args) {
+		SALAO salao = new SALAO();
+		//cozinha.setVisible(true);
+		salao.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+	}
+
+}
