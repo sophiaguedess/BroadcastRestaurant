@@ -1,0 +1,56 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.border.EmptyBorder;
+
+public class SALAO extends JFrame {
+
+	public JFrame frame;
+	public JPanel contentPane;
+	public JListCustomRenderer j = new JListCustomRenderer();
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					SALAO frame = new SALAO();
+					frame.setBackground(Color.white);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public SALAO() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBackground(Color.white);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		contentPane.setLayout(new BorderLayout());
+		
+		JPanel a = j.createPanelList();
+		a.setBackground(Color.white);
+		
+		
+		contentPane.add(a, BorderLayout.CENTER);
+		setContentPane(contentPane);
+		
+		
+	}
+
+}
