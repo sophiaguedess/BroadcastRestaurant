@@ -1,0 +1,132 @@
+package telas;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+
+public class Alternar_Tela extends JFrame{
+    private int  NOVA_LINHA = 0;
+    private int NOVA_COLUNA = 1;
+    GridBagConstraints gbc = null;
+    
+    public Alternar_Tela() {
+   	 super("BroadCast Restaurant");
+   	 Container at = getContentPane();
+   	 setVisible(true);
+   	 setExtendedState(JFrame.MAXIMIZED_BOTH);
+   	 //setBounds(100, 100, 450, 300);
+   	 getContentPane().setBackground((Color.WHITE));
+   	 GridBagLayout l = new GridBagLayout();
+   	 at.setLayout(l);
+   	 gbc = new GridBagConstraints();
+   	 gbc.insets = new Insets(10,0,10,0);
+   	 
+   	 JButton botaoCozinha = new JButton();
+   	 JButton botaoSalao = new JButton();
+   	// JLabel selecione = new JLabel("Escolha o ambiente");
+   	 	  JLabel selecione = new JLabel("Escolha o ambiente :", JLabel.CENTER);
+    	//JLabel selecione = new JLabel("Escolha o ambiente", SwingConstants.CENTER);
+	    //selecione.setVerticalAlignment(SwingConstants.CENTER);
+    	//selecione.setHorizontalAlignment(JLabel.CENTER);
+    	//selecione.setVerticalAlignment(JLabel.CENTER);
+   	 	//selecione.setLocation((this.getWidth()-selecione.getWidth())/2,50);
+   	 	selecione.setFont(new Font("Times New Roman", Font.BOLD, 25));
+   	 	
+   	 JLabel cozinha1 = new JLabel("Cozinha");
+   	 JLabel salao1 = new JLabel("Salão");
+   	 salao1.setFont(new Font("Times New Roman", Font.BOLD, 25));
+   	 cozinha1.setFont(new Font("Times New Roman", Font.BOLD, 25));
+   	
+   	 ImageIcon iconeCozinha = new ImageIcon(getClass().getResource("icone_cozinha_botao2.jpg"));
+   	 ImageIcon iconeSalao = new ImageIcon(getClass().getResource("icone_salao_botao3.jpg"));
+   	
+   	 botaoCozinha.setBorderPainted(false);
+   	 botaoCozinha.setContentAreaFilled(false);
+   	 botaoSalao.setBorderPainted(false);
+   	 botaoSalao.setContentAreaFilled(false);
+   	 
+   	 
+   	 configurarGBC(NOVA_LINHA);
+   	 at.add(selecione, gbc);
+   	 configurarGBC(NOVA_LINHA);
+   	 at.add(botaoSalao, gbc);
+   	 configurarGBC(NOVA_COLUNA);
+   	 at.add(botaoCozinha, gbc);
+   	 configurarGBC(NOVA_LINHA);
+   	 at.add(salao1, gbc);
+   	 configurarGBC(NOVA_COLUNA);
+   	 at.add(cozinha1, gbc);
+   	 botaoSalao.setIcon(iconeSalao);
+   	 botaoCozinha.setIcon(iconeCozinha);
+    
+   	 
+    //    setBounds(100, 100, 300, 300);
+   	
+   	
+    	Ativabotao eventoS = new Ativabotao();
+   	 
+   	 botaoSalao.addActionListener(eventoS);
+   	 
+   	 AcionaBotao eventoC = new AcionaBotao();
+   	 
+   	 botaoCozinha.addActionListener(eventoC);
+   	 
+    }
+    
+    public void configurarGBC(int posicao) {
+   	 if(posicao == NOVA_LINHA) {
+   		 gbc.gridy = gbc.gridy +1;
+   		 gbc.gridx = 0;
+   	 }else {
+   		 gbc.gridx = gbc.gridx +1;
+   	 }
+   	 
+    }
+    
+    private class AcionaBotao implements ActionListener{
+
+   	 @Override
+   	 public void actionPerformed(ActionEvent eventoC) {
+   		 
+   		COZINHA cozinha = new COZINHA();
+   		 cozinha.setExtendedState(JFrame.MAXIMIZED_BOTH);  		 
+   		 cozinha.setVisible(true);
+   		 dispose();
+   		 
+   	 }
+   	 
+    }
+    
+    private class Ativabotao implements ActionListener{
+
+   	 @Override
+   	 public void actionPerformed(ActionEvent eventoS) {
+   		 
+   		 Entrada_Usuario salao = new Entrada_Usuario();
+   		 salao.setVisible(true);
+   		 dispose();
+   		 
+   	 }
+   	 
+    }
+    
+    public static void main(String[] args) {
+    	//JLabel selecione = new JLabel("Escolha o ambiente", SwingConstants.CENTER);
+    	//selecione.setVerticalAlignment(SwingConstants.CENTER);
+    	
+   	 Alternar_Tela guia = new Alternar_Tela();
+    
+   	 guia.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    }
+}
