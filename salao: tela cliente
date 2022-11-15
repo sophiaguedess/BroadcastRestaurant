@@ -30,12 +30,20 @@ import javax.swing.DefaultComboBoxModel;
 import java.awt.Cursor;
 import javax.swing.border.LineBorder;
 
+import Control.ClienteControl;
+
 public class Entrada_Usuario extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField campoNome;
+	private JTextField campoNumMesa;
+	private JTextField campoMesa;
+	
+	ClienteControl ClieControl = new ClienteControl();
 
+	/**
+	 * Launch the application.
+	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -48,6 +56,11 @@ public class Entrada_Usuario extends JFrame {
 			}
 		});
 	}
+	
+	
+	/**
+	 * Create the frame.
+	 */
 	public Entrada_Usuario() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1371, 742);
@@ -81,27 +94,21 @@ public class Entrada_Usuario extends JFrame {
 		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 30));
 		contentPane.add(lblNewLabel);
 		
-		textField = new JTextField();
-		textField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		textField.setBounds(252, 291, 863, 51);
-		textField.setColumns(10);
-		contentPane.add(textField);
-		
-		JLabel label_5 = new JLabel("");
-		label_5.setBounds(452, 281, 451, 140);
-		contentPane.add(label_5);
+		campoNome = new JTextField();
+		campoNome.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		campoNome.setBounds(268, 309, 782, 43);
+		campoNome.setColumns(10);
+		contentPane.add(campoNome);
 		
 		JLabel label_6 = new JLabel("");
 		label_6.setBounds(903, 281, 451, 140);
 		label_6.setBackground(new Color(255, 250, 250));
 		contentPane.add(label_6);
 		
-		JToggleButton tglbtnNewToggleButton = new JToggleButton("Continuar");
-		tglbtnNewToggleButton.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-		tglbtnNewToggleButton.addActionListener(new ActionListener() {
+		JToggleButton btnContinuar = new JToggleButton("Continuar");
+		btnContinuar.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		btnContinuar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String nome = textField.getText();
-				String mesa = textField.getText();
 				
 				Usuario usuario = new Usuario();
 				
@@ -111,16 +118,16 @@ public class Entrada_Usuario extends JFrame {
 				
 			}
 		});
-		tglbtnNewToggleButton.setToolTipText("Aperte para prosseguir o pedido");
-		tglbtnNewToggleButton.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		tglbtnNewToggleButton.setForeground(new Color(0, 0, 0));
-		tglbtnNewToggleButton.setBackground(new Color(255, 255, 255));
-		tglbtnNewToggleButton.setBounds(1175, 626, 124, 51);
-		contentPane.add(tglbtnNewToggleButton);
+		btnContinuar.setToolTipText("Aperte para prosseguir o pedido");
+		btnContinuar.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		btnContinuar.setForeground(new Color(0, 0, 0));
+		btnContinuar.setBackground(new Color(255, 255, 255));
+		btnContinuar.setBounds(1175, 626, 124, 51);
+		contentPane.add(btnContinuar);
 		
 		JLabel label_8 = new JLabel("");
 		label_8.setBackground(new Color(255, 250, 250));
-		label_8.setBounds(452, 561, 451, 140);
+		label_8.setBounds(203, 552, 451, 140);
 		contentPane.add(label_8);
 		
 		JTextArea txtrSeuNome = new JTextArea();
@@ -131,7 +138,7 @@ public class Entrada_Usuario extends JFrame {
 		txtrSeuNome.setBackground(new Color(255, 255, 255));
 		txtrSeuNome.setText("Seu nome:");
 		txtrSeuNome.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		txtrSeuNome.setBounds(252, 258, 293, 22);
+		txtrSeuNome.setBounds(268, 281, 89, 31);
 		contentPane.add(txtrSeuNome);
 		
 		JTextArea txtrInformeAMesa = new JTextArea();
@@ -139,27 +146,20 @@ public class Entrada_Usuario extends JFrame {
 		txtrInformeAMesa.setSelectionColor(Color.BLACK);
 		txtrInformeAMesa.setEnabled(false);
 		txtrInformeAMesa.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		txtrInformeAMesa.setText("Seu pedido \u00E9 para viagem ou para consumir no estabelecimento?");
-		txtrInformeAMesa.setBounds(252, 436, 499, 22);
+		txtrInformeAMesa.setText("Seu pedido \u00E9:");
+		txtrInformeAMesa.setBounds(268, 425, 289, 22);
 		contentPane.add(txtrInformeAMesa);
-		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBackground(Color.WHITE);
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Para viagem", "Para consumir no estabelecimento"}));
-		comboBox.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		comboBox.setBounds(252, 469, 539, 43);
-		contentPane.add(comboBox);
 		
 		JLabel lblNewLabel_2 = new JLabel("N\u00FAmero da mesa:");
 		lblNewLabel_2.setFont(new Font("Times New Roman", Font.PLAIN, 17));
-		lblNewLabel_2.setBounds(879, 441, 172, 14);
+		lblNewLabel_2.setBounds(724, 430, 172, 14);
 		contentPane.add(lblNewLabel_2);
 		
-		textField_1 = new JTextField();
-		textField_1.setFont(new Font("Times New Roman", Font.PLAIN, 17));
-		textField_1.setBounds(879, 469, 236, 43);
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
+		campoNumMesa = new JTextField();
+		campoNumMesa.setFont(new Font("Times New Roman", Font.PLAIN, 17));
+		campoNumMesa.setBounds(724, 457, 146, 43);
+		contentPane.add(campoNumMesa);
+		campoNumMesa.setColumns(10);
 		
 		JButton btnVoltar = new JButton("Voltar");
 		btnVoltar.setBackground(new Color(255, 255, 255));
@@ -173,6 +173,36 @@ public class Entrada_Usuario extends JFrame {
 		btnVoltar.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		btnVoltar.setBounds(69, 626, 124, 51);
 		contentPane.add(btnVoltar);
+		
+		campoMesa = new JTextField();
+		campoMesa.setFont(new Font("Times New Roman", Font.PLAIN, 17));
+		campoMesa.setColumns(10);
+		campoMesa.setBounds(268, 458, 381, 43);
+		contentPane.add(campoMesa);
+		
+		JButton btnRegistrar = new JButton("Resgistrar");
+		btnRegistrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				String nome = campoNome.getText();
+				String situacao = campoMesa.getText();
+				String numMesa = campoNumMesa.getText();
+				
+				ClieControl.InserirDados(nome, situacao, numMesa);
+				
+			}
+		});
+		btnRegistrar.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		btnRegistrar.setBounds(940, 459, 110, 43);
+		contentPane.add(btnRegistrar);
+		
+		JTextArea txtrPara = new JTextArea();
+		txtrPara.setText("1 - para viagem        2 - para comer no estabelecimento");
+		txtrPara.setSelectionColor(Color.BLACK);
+		txtrPara.setFont(new Font("Times New Roman", Font.ITALIC, 14));
+		txtrPara.setEnabled(false);
+		txtrPara.setDisabledTextColor(Color.BLACK);
+		txtrPara.setBounds(268, 512, 324, 22);
+		contentPane.add(txtrPara);
 		
 		
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
