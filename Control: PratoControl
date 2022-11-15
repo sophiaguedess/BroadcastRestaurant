@@ -1,0 +1,30 @@
+import java.sql.Connection;
+import java.sql.ResultSet;
+
+import javax.swing.JOptionPane;
+import com.mysql.jdbc.Statement;
+import DAO.ConexaoBR;
+import telas.Prato;
+
+public class PratoControl {
+	public String InserirPrato(String name, String description) {
+		ConexaoBR banco2 = new ConexaoBR();
+		String retorno = "erro";
+		
+		try {
+			Connection ExConn = (Connection) banco2.abrirBDConn1();
+			Statement stmt = (Statement) ExConn.createStatement();
+			String sSQL = "INSERT INTO projetoBR.Prato VALUES ('"+name+"', '"+description+"')";
+			System.out.println(sSQL);
+			boolean res = stmt.execute(sSQL);
+			
+			JOptionPane.showMessageDialog(null, (!res)?"Prato registrado!":""+"Prato não registrado!");
+			stmt.close();
+			banco2.FecharBDConn1();
+			
+		}catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Prato não registrado!");
+		}
+		return retorno;
+}
+}
