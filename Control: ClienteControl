@@ -1,0 +1,30 @@
+import java.sql.Connection;
+
+import javax.swing.JOptionPane;
+
+import com.mysql.jdbc.Statement;
+
+import DAO.ConexaoBR;
+
+public class ClienteControl {
+	public String InserirDados(String nome, String situacao, String numMesa) {
+		ConexaoBR banco = new ConexaoBR();
+		String retorno = "erro";
+		
+		try {
+			Connection ExConn = (Connection) banco.abrirBDConn1();
+			Statement stmt = (Statement) ExConn.createStatement();
+			String sSQL = "INSERT INTO projetoBR.Cliente VALUES ('"+nome+"', '"+situacao+"', '"+numMesa+"')";
+			System.out.println(sSQL);
+			boolean res = stmt.execute(sSQL);
+			
+			JOptionPane.showMessageDialog(null, (!res)?"Dados inseridos com sucesso!":""+"Os dados não puderam ser inseridos!");
+			stmt.close();
+			banco.FecharBDConn1();
+			
+		}catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Os dados não puderam ser inseridos");
+		}
+		return retorno;
+}
+}
