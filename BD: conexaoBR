@@ -1,0 +1,39 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import com.mysql.jdbc.Statement;
+
+public class ConexaoBR {
+	
+	Connection con;
+	private Connection oConn;
+	private Statement sStmt;
+
+	public ConexaoBR() {
+	
+	}
+	public Connection abrirBDConn1() {
+		try {
+				//String url = "jdbc:mysql://localhost:/banco?useTimezone=true&serverTimezone=UTC", "root", "root";
+				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/projetoBR?verifyServerCertificate=false&useSSL=true&useTimezone=true&serverTimezone=UTC", "root", "root");
+				System.out.println("conectado");
+			} catch (SQLException erro) {
+				JOptionPane.showMessageDialog(null, erro.getMessage());
+			
+			}
+			
+			return con; }
+			
+			
+			public void FecharBDConn1() {
+		try {
+			con.close();
+			System.out.println("Conexão finalizada com sucesso");
+		}catch (Exception e) {
+			System.out.println("Erro ao fechar conexao com o banco" + e.getMessage());
+		}
+	}
+	}
