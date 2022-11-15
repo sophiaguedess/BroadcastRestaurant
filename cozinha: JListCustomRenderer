@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -15,12 +16,21 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import com.mysql.jdbc.Statement;
+
+import Control.PratoControl;
+import DAO.ConexaoBR;
+
 
 public class JListCustomRenderer extends JFrame {
 	public JList<Prato> listPrato;
 	public JList<Prato> list;
 	public DefaultListModel<Prato> model = new DefaultListModel<>();
 
+	PratoControl PraControl = new PratoControl();
+	
+	ConexaoBR conexao;
+	
 	public JListCustomRenderer() {
 		// add main panel
 		add(createMainPanel());
@@ -55,9 +65,10 @@ public class JListCustomRenderer extends JFrame {
 	}
 
 	private JList<Prato> createListPratos() {
+		//model.addElement(new Prato());
 		model.addElement(new Prato("Bolo de Chocolate", "DESCRIÇÃO", "ch"));
-		model.addElement(new Prato("Suco de Maracujá", "DESCRIÇÃO", "mq"));
-		model.addElement(new Prato("Misto Quente", "DESCRIÇÃO", "sm"));
+		//model.addElement(new Prato("Suco de Maracujá", "DESCRIÇÃO", "mq"));
+		//model.addElement(new Prato("Misto Quente", "DESCRIÇÃO", "sm"));
 		// create JList with model
 		list = new JList<Prato>(model);
 		// set cell renderer
@@ -94,9 +105,27 @@ public class JListCustomRenderer extends JFrame {
 			lblNewLabel_1.setBounds(92, 171, 124, 14);
 			add(lblNewLabel_1);
 			
+			//try {
+				//Statement stmt = (Statement) ExConn.createStatement();
+				//String sSQL = "SELECT * FROM projetoBR.Prato";
+				//System.out.println(sSQL);
+				//boolean res = stmt.execute(sSQL);
+				//jTable.setModel(new ModeloTabela(conexao.ResultSet));
+				
+				
+				
+			//}catch(SQLException erro) { 
+				
+		//	}
+			
 			JButton btnNewButton = new JButton("ADICIONAR");
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					String name = textField.getText();
+					String description = textField_1.getText();
+										
+					PraControl.InserirPrato(name, description);
+					
 				}
 			});
 			btnNewButton.setBounds(122, 348, 124, 23);
