@@ -1,0 +1,31 @@
+package Control;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import com.mysql.jdbc.Statement;
+import DAO.ConexaoBR;
+import telas.JListCustomRenderer;
+
+public class MenuControl {
+	public String MenuDisplay() {
+		ConexaoBR banco2 = new ConexaoBR();
+		String retorno = "erro";
+		
+		try {
+			Connection ExConn = (Connection) banco2.abrirBDConn1();
+			Statement stmt = (Statement) ExConn.createStatement();
+			String sSQL = "SELECT * FROM Prato";
+			System.out.println(sSQL);
+			boolean res = stmt.execute(sSQL);
+			
+			//JOptionPane.showMessageDialog(null, (!res)?"Conectado!":""+"Não Conectado");
+			stmt.close();
+			banco2.FecharBDConn1();
+			
+		}catch (Exception e) {
+		//	JOptionPane.showMessageDialog(null, "NÃO CONECTADO");
+		}
+		return retorno;
+}
+}
