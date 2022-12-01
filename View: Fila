@@ -1,0 +1,293 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.Timer;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+
+import Control.PedidoControl;
+import DAO.ConexaoBR;
+
+import java.awt.Frame;
+import java.awt.Font;
+import javax.swing.border.LineBorder;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
+
+public class Fila extends JFrame {
+
+	private JPanel contentPane;
+	private JTable tabela = new JTable() ;
+	public PedidoControl p = new PedidoControl();
+	List<Pedido> lista;
+	ConexaoBR conexao;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Fila frame = new Fila();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Fila() {
+		
+		//modelLimpo.setRowCount(0);
+		
+		setExtendedState(Frame.MAXIMIZED_BOTH);
+		setBackground(new Color(255, 255, 255));
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 1371, 742);
+		contentPane = new JPanel();
+		contentPane.setBackground(new Color(255, 255, 255));
+
+		setContentPane(contentPane);
+		
+		//setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		carregarPedidos();
+		contentPane.setLayout(null);
+		
+		JPanel barra = new JPanel();
+		barra.setLayout(null);
+		barra.setEnabled(false);
+		barra.setBackground(new Color(128, 0, 0));
+		barra.setBounds(-394, 0, 1762, 56);
+		contentPane.add(barra);
+		
+		JLabel lblLista = new JLabel("Fila de pedidos");
+		lblLista.setBounds(938, 11, 292, 34);
+		barra.add(lblLista);
+		lblLista.setForeground(new Color(255, 255, 255));
+		lblLista.setHorizontalAlignment(SwingConstants.CENTER);
+		lblLista.setFont(new Font("Times New Roman", Font.BOLD, 22));
+		lblLista.setBackground(new Color(128, 0, 0));
+
+		tabela.setToolTipText("Pedidos em ordem cronol\u00F3gica");
+		tabela.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+		//tabela.setModel(model);
+		JScrollPane scrollPane = new JScrollPane(tabela);
+		scrollPane.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		scrollPane.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		scrollPane.setBackground(new Color(255, 255, 255));
+		scrollPane.setBounds(10, 67, 1345, 573);
+		scrollPane.setBackground(new Color (255,255,255));
+		
+		tabela.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		tabela.setBackground(new Color (255,255,255,255));
+		
+		tabela.setRowHeight(50);
+		
+		JTableHeader header = tabela.getTableHeader();
+		header.setFont(new Font ("Times New Roman", Font.BOLD, 24));
+		header.setBackground(new Color (255,255,255,255));
+		
+		contentPane.setBackground(new Color(255, 255, 255));
+		contentPane.add(scrollPane);
+		
+		
+		JPanel panel = new JPanel();
+		panel.setToolTipText("Use estas funções para alterar a lista");
+		panel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		panel.setBackground(new Color(255, 255, 255));
+		panel.setBounds(140, 638, 1071, 65);
+		contentPane.add(panel);
+		
+		JButton excluir = new JButton("Excluir");
+		excluir.setBackground(new Color(255, 255, 255));
+		excluir.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		excluir.setToolTipText("Excluir pedidos");
+		excluir.setBounds(842, 14, 100, 40);
+		
+		excluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				deletarPedidos();
+				System.out.println("funcionou ?!");
+			}
+			});
+		panel.setLayout(null);
+		panel.add(excluir);
+		
+		
+		
+		JButton atualizar = new JButton("Atualizar");
+		atualizar.setBackground(new Color(255, 255, 255));
+		atualizar.setToolTipText("Atualizar os pedidos");
+		atualizar.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		atualizar.setBounds(474, 14, 100, 40);
+		atualizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lista.clear();
+				tabela.setModel(carregarPedidos());
+				System.out.println(lista.toString());
+			}
+			});
+		
+	//	panel.add(atualizar);
+		
+		Timer timer = new Timer(3000, new ActionListener() {
+
+			   @Override
+			   public void actionPerformed(ActionEvent e) {
+			      atualizar.doClick();
+			      System.out.println("refresh");
+			   }
+			});
+
+			timer.start();
+		
+		JButton btnNewButton_2 = new JButton("Voltar");
+		btnNewButton_2.setBackground(new Color(255, 255, 255));
+		btnNewButton_2.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		btnNewButton_2.setToolTipText("Voltar para a tela anterior");
+		btnNewButton_2.setBounds(115, 14, 100, 40);
+		panel.add(btnNewButton_2);
+		
+		
+	}
+	
+	public DefaultTableModel carregarPedidos() {
+		
+		DefaultTableModel model = new DefaultTableModel();
+		
+		try 
+		{
+			
+			model.addColumn("Cliente");
+			
+			model.addColumn("Pedido");
+			//model.setFont(new Font("Times New Roman", Font.PLAIN, 16);
+			
+			model.addColumn("Quantidade");
+			
+			model.addColumn("Mesa");
+			
+			model.addColumn("Observação");
+			
+			tabela.setModel(model);
+			
+			lista = p.listarPrato();
+			
+			for (int x = 0; x < lista.size(); x++) {
+			
+						String pedido = lista.get(x).getPedido();
+						String qnt = lista.get(x).getQnt();
+						String cliente = lista.get(x).getCliente();
+						String mesa = lista.get(x).getMesa();
+						String obs = lista.get(x).getObs();
+						
+						String [] data = {cliente,pedido,qnt, mesa,  obs};
+
+						model.addRow(data);
+			}
+			
+	
+		} 
+		
+		
+		catch (SQLException e) 
+		{
+			JOptionPane.showMessageDialog(contentPane, "Fila : Carregar Pedidos : " + e);
+		}
+		return model;
+	
+	}
+	
+	public DefaultTableModel deletarPedidos() {
+		DefaultTableModel model = new DefaultTableModel();
+		Pedido pedido = new Pedido();
+		
+		int row = tabela.getSelectedRow();
+		int column = 0;
+		int columnp = 1;
+		
+		String cliente = (String) tabela.getValueAt(row, column);
+		String pedido_nome = (String) tabela.getValueAt(row, columnp);
+		
+		pedido.setCliente(cliente);
+		pedido.setPedido(pedido_nome);
+		
+		p.RemoverPedido(pedido_nome, cliente);
+		
+		model.removeRow(row);
+		
+		tabela.remove(row);
+		
+		System.out.println(cliente);
+		
+
+		
+	//	tabela = new JTable(model);
+		
+		tabela.clearSelection();
+		return model;
+	}
+	
+	public DefaultTableModel listarData() {
+		DefaultTableModel model = new DefaultTableModel();
+		
+		try 
+		{
+			tabela.setModel(model);
+			List<Pedido> lista = p.listarPrato();
+			
+			for (int x = 0; x < lista.size(); x++) {
+			
+						String pedido = lista.get(x).getPedido();
+						String qnt = lista.get(x).getQnt();
+						String cliente = lista.get(x).getCliente();
+						String mesa = lista.get(x).getMesa();
+						String obs = lista.get(x).getObs();
+						
+						String [] data = {cliente, pedido, qnt, mesa,obs};
+
+						model.addRow(data);
+			}
+		} 
+		
+		
+		catch (SQLException e) 
+		{
+			JOptionPane.showMessageDialog(contentPane, "Fila : Carregar Pedidos : " + e);
+		}
+		return model;
+	}
+	
+	public void limpar(DefaultTableModel model) {
+	    for( int i = model.getRowCount() - 1; i >= 0; i-- ) {
+	        model.removeRow(i);
+	    }
+	}
+}
