@@ -1,0 +1,252 @@
+import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.EventObject;
+
+import javax.swing.CellEditor;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.CellEditorListener;
+
+import java.sql.Connection;
+
+//import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.Statement;
+
+import Control.PratoControl;
+import DAO.ConexaoBR;
+import Control.MenuControl;
+
+
+public class JListCustomRenderer extends JFrame {
+	public static JList<Prato> listPrato;
+	public static JList<Prato> list;
+	public static Prato p, prato;
+	JPopupMenu popup = new JPopupMenu();
+	public static DefaultListModel<Prato> model = new DefaultListModel<>();
+	public JPanel contentPane;
+	public String[] columnNames = {"Cliente", "Pedido", "Mesa"};
+
+	PratoControl PraControl = new PratoControl();
+	
+	ConexaoBR conexao;
+	
+	public JListCustomRenderer() {
+		super();
+	}
+	
+	public void JListCustomRenderer() {
+		contentPane = new JPanel();
+		JButton btnVoltar = new JButton("Voltar");
+		btnVoltar.setBackground(new Color(255, 255, 255));
+		btnVoltar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		
+		btnVoltar.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		btnVoltar.setBounds(69, 626, 124, 51);
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBackground(Color.white);
+		contentPane.setLayout(new BorderLayout());
+		// add main panel
+		contentPane.add(createMainPanel(), BorderLayout.CENTER);
+		contentPane.add(btnVoltar, BorderLayout.SOUTH);
+		// set display
+		setTitle("MENU");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setSize(width, height);
+		setLocationRelativeTo(null);
+		setContentPane(contentPane);
+		setExtendedState(JListCustomRenderer.MAXIMIZED_BOTH);
+		setVisible(true);
+	}
+	
+	public JPanel createPanelList() {
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
+		panel.add(new JScrollPane(listPrato = restaurarPratos()),BorderLayout.CENTER);
+		listPrato.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		return panel;
+	}
+
+	public JSplitPane createMainPanel() {
+		JSplitPane panel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT );
+		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
+		panel.setLeftComponent(new JScrollPane(restaurarPratos()));
+		panel.setRightComponent(new JScrollPane(createSecondaryPanel()));
+		return panel;
+	}
+	
+	private JPanel createSecondaryPanel() {
+		Form panel = new Form();
+		return panel;
+	}
+
+	private JList<Prato> createListPratos() {
+		
+		list = new JList<Prato>(model);
+		list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		popup.add(new JMenuItem("Hello World"));
+		list.setComponentPopupMenu(popup);
+		list.setCellRenderer(new PedidoRenderer());
+		return list;
+	}
+	
+	public JList<Prato> restaurarPratos() {
+		try {
+		model.clear();
+		PratoControl pratoc = new PratoControl();
+		ResultSet rs = pratoc.listarPrato();
+		
+		while (rs.next()) {
+			Prato p2 = new Prato();
+			p2.setName(rs.getString("nome"));
+			p2.setDescription(rs.getString("descricao"));
+			Float x = rs.getFloat("preco");
+			p2.setPrice(x.toString());
+			model.addElement(p2);
+		} 
+	} catch (SQLException e) {
+		
+	}
+		list = new JList<Prato>(model);
+		list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		list.setCellRenderer(new PratoRenderer());
+		return list;
+}
+	
+
+	public class Form extends JPanel {
+		private JTextField textField;
+		private JTextField textField_1;
+		private JTextField textField_2;
+
+		/**
+		 * Create the panel.
+		 */
+		public Form() {
+			setBackground(new Color(255, 255, 255));
+			setLayout(null);
+			
+			textField = new JTextField();
+			textField.setBounds(92, 80, 184, 36);
+			add(textField);
+			textField.setColumns(10);
+			
+			textField_1 = new JTextField();
+			textField_1.setBounds(92, 196, 184, 36);
+			add(textField_1);
+			textField_1.setColumns(10);
+			
+			textField_2 = new JTextField();
+			textField_2.setBounds(92, 290, 184, 36);
+			add(textField_2);
+			textField_2.setColumns(10);
+			
+			JLabel lblNewLabel = new JLabel("NOME :");
+			lblNewLabel.setBounds(92, 55, 46, 14);
+			add(lblNewLabel);
+			
+			JLabel lblNewLabel_1 = new JLabel("DESCRIÇÃO:");
+			lblNewLabel_1.setBounds(92, 171, 124, 14);
+			add(lblNewLabel_1);
+			
+			JLabel lblNewLabel_2 = new JLabel("PREÇO:");
+			lblNewLabel_2.setBounds(92, 270, 200, 14);
+			add(lblNewLabel_2);
+			
+			JButton btnNewButton = new JButton("ADICIONAR");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String name = textField.getText();
+					String description = textField_1.getText();
+					String price = textField_2.getText();
+					double preco = Double.parseDouble(price);
+										
+					PraControl.InserirPrato(name, description, preco);
+					
+					p = new Prato(name, description,"icone_prato.jpg", price);
+			  		model.addElement(p);
+			  		list = new JList<Prato>(model);
+			  		list.setCellRenderer(new PratoRenderer());
+			  		list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+					
+				}
+			});
+			btnNewButton.setBounds(92, 348, 124, 23);
+			add(btnNewButton);
+			
+			JButton excluir = new JButton("EXCLUIR");
+			excluir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Prato prato = new Prato();
+					
+					
+					prato = list.getSelectedValue();
+					int a = list.getSelectedIndex();
+					
+					String nome = prato.getName();
+					
+					PraControl.RemoverPrato(nome);
+					
+					model.removeElement(prato);
+					
+					list.clearSelection();
+					
+				}
+			});
+			excluir.setBounds(250, 348, 124, 23);
+			add(excluir);
+
+		}
+		
+
+		public void deletarPratos() {
+			Prato prato = new Prato();
+			
+			prato = list.getSelectedValue();
+			int a = list.getSelectedIndex();
+			
+			String nome = prato.getName();
+			
+			PraControl.RemoverPrato(nome);
+			
+			model.remove(a);
+			
+			restaurarPratos();
+			 
+		}
+		}
+	
+
+	public static void main(String[] args) {
+		JListCustomRenderer lista = new JListCustomRenderer();
+		lista.JListCustomRenderer();
+		
+	}
+	
+}
