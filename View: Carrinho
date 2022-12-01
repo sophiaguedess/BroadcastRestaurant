@@ -1,0 +1,207 @@
+package telas;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import java.awt.Frame;
+import java.awt.Color;
+import javax.swing.JToolBar;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.Point;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.Font;
+import javax.swing.border.LineBorder;
+
+import Control.PedidoControl;
+
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import javax.swing.JList;
+import javax.swing.JSeparator;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+
+public class Carrinho extends JFrame {
+	public static JList<Prato> lista;
+	public static JList<Prato> listaP;
+	public static DefaultListModel<Prato> model = Salao_Menu.model;
+	public String user = Entrada_Usuario.usuario.nome, mesa = Entrada_Usuario.usuario.mesa, preço_total;
+	public Double  total = Salao_Menu.totalFinal;
+	public PedidoControl peControl = new PedidoControl();
+	JLabel nome, numMesa, preco;
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Carrinho frame = new Carrinho();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Carrinho() {
+		preço_total = Double.toString(total);
+		setBackground(new Color(255, 255, 255));
+		setExtendedState(Frame.MAXIMIZED_BOTH);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 1371, 742);
+		contentPane = new JPanel();
+		contentPane.setBackground(new Color(255, 255, 255));
+		
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JPanel barra = new JPanel();
+		barra.setLayout(null);
+		barra.setEnabled(false);
+		barra.setBackground(new Color(128, 0, 0));
+		barra.setBounds(-394, 0, 1762, 56);
+		contentPane.add(barra);
+		
+		JButton cancelar = new JButton("Cancelar");
+		cancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				peControl.RemoverPedido(user);
+				model.clear();
+				dispose();
+			}});
+		//panel_1.add(cancelar);
+			
+		cancelar.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		cancelar.setToolTipText("Clique para cancelar o pedido");
+		cancelar.setBounds(200, 641, 124, 51);
+		contentPane.add(cancelar);
+		
+		JButton deletar = new JButton("Deletar");
+		deletar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Prato p = lista.getSelectedValue();
+				String nome = p.getName();
+				peControl.RemoverPedido(nome,user);
+				model.removeElement(p);
+				//dispose();
+			}});
+		//panel_1.add(cancelar);
+			
+		deletar.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		deletar.setToolTipText("Clique para cancelar o pedido");
+		deletar.setBounds(620, 641, 124, 51);
+		contentPane.add(deletar);
+		
+		JButton confirmar = new JButton("Confirmar");
+		confirmar.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		confirmar.setToolTipText("Clique para confirmar o pedido");
+		confirmar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		confirmar.setBounds(1020, 641, 124, 51);
+		contentPane.add(confirmar);
+		
+		JPanel panelInfos = new JPanel();
+		panelInfos.setToolTipText("Informa\u00E7\u00F5es do cliente");
+		panelInfos.setBackground(new Color(255, 255, 255));
+		panelInfos.setBorder(new LineBorder(new Color(128, 0, 0), 2, true));
+		panelInfos.setBounds(108, 69, 1161, 40);
+		contentPane.add(panelInfos);
+		panelInfos.setLayout(null);
+		
+		JLabel lblNome = new JLabel("Nome: ");
+		lblNome.setBounds(21, 11, 70, 20);
+		lblNome.setAlignmentX(Component.CENTER_ALIGNMENT);
+		lblNome.setHorizontalAlignment(SwingConstants.LEFT);
+		lblNome.setVerticalTextPosition(SwingConstants.BOTTOM);
+		lblNome.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblNome.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		panelInfos.add(lblNome);
+		
+		nome = new JLabel(user);
+		nome.setBounds(80, 11, 192, 20);
+		nome.setAlignmentX(Component.CENTER_ALIGNMENT);
+		nome.setHorizontalAlignment(SwingConstants.LEFT);
+		nome.setVerticalTextPosition(SwingConstants.BOTTOM);
+		nome.setVerticalAlignment(SwingConstants.BOTTOM);
+		nome.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		panelInfos.add(nome);
+		
+		JLabel lblSituao = new JLabel("Mesa: ");
+		lblSituao.setVerticalTextPosition(SwingConstants.BOTTOM);
+		lblSituao.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblSituao.setHorizontalAlignment(SwingConstants.LEFT);
+		lblSituao.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		lblSituao.setAlignmentX(0.5f);
+		lblSituao.setBounds(477, 11, 70, 20);
+		panelInfos.add(lblSituao);
+		
+		numMesa = new JLabel(mesa);
+		numMesa.setVerticalTextPosition(SwingConstants.BOTTOM);
+		numMesa.setVerticalAlignment(SwingConstants.BOTTOM);
+		numMesa.setHorizontalAlignment(SwingConstants.LEFT);
+		numMesa.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		numMesa.setAlignmentX(0.5f);
+		numMesa.setBounds(580, 11, 70, 20);
+		panelInfos.add(numMesa);
+		
+		JLabel lblMesa = new JLabel("Total: R$ ");
+		lblMesa.setVerticalTextPosition(SwingConstants.BOTTOM);
+		lblMesa.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblMesa.setHorizontalAlignment(SwingConstants.LEFT);
+		lblMesa.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		lblMesa.setAlignmentX(0.5f);
+		lblMesa.setBounds(800, 11, 70, 20);
+		panelInfos.add(lblMesa);
+		
+		preco = new JLabel(preço_total);
+		preco.setVerticalTextPosition(SwingConstants.BOTTOM);
+		preco.setVerticalAlignment(SwingConstants.BOTTOM);
+		preco.setHorizontalAlignment(SwingConstants.LEFT);
+		preco.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		preco.setAlignmentX(0.5f);
+		preco.setBounds(970, 11, 70, 20);
+		panelInfos.add(preco);
+		
+		System.out.println(preço_total);
+		
+		JPanel panelSeparar = new JPanel();
+		panelSeparar.setBackground(new Color(128, 0, 0));
+		panelSeparar.setBounds(433, 614, 502, 4);
+		contentPane.add(panelSeparar);
+		
+		JScrollPane scrollPane = new JScrollPane(listaP = createListPratos());
+		scrollPane.setBackground(new Color(255, 255, 255));
+		scrollPane.setBorder(new LineBorder(new Color(128, 0, 0)));
+		scrollPane.setBounds(0, 120, 1368, 483);
+		contentPane.add(scrollPane);
+		
+		JScrollPane list = new JScrollPane();
+		list.setBounds(2, 137, 1366, 466);
+		contentPane.add(list);
+		
+		
+		}
+	
+	 	JList<Prato> createListPratos() {
+			
+			lista = new JList<Prato>(model);
+			lista.setCellRenderer(new PedidoRenderer());
+			return lista;
+		}
+	}
