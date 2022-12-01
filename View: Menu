@@ -1,0 +1,326 @@
+import java.awt.Color;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
+import javax.swing.JScrollPane;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import java.awt.Font;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
+import javax.swing.JTextField;
+import java.awt.Cursor;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import Control.PedidoControl;
+import DAO.ConexaoBR;
+
+public class Salao_Menu extends JFrame {
+
+	private JPanel contentpanelMenu;
+	private JTextField textField;
+	public JListCustomRenderer menu = new JListCustomRenderer();
+	public JList<Prato> cardapio;
+	public JLabel lblQuantidadeProd, lblNomeDoPrato, lblQnt, lblNomeDoPrato_1;
+	public static Prato prato = new Prato(), p = new Prato();
+	public static Pedido pedido;
+	public static DefaultListModel<Prato> model = new DefaultListModel<Prato>();
+	public String nome_usuario, mesa_usuario, situacao_usuario, descricao, qntPedido, observacao;
+	public String nomeP, precoP, qntP, obsP, qntS, totalP;
+	public int qnt = 0;
+	public static double preco, total = 0, price, totalPedido, totalFinal = 0;
+	public double valor;
+	boolean res;
+	public static ArrayList<Pedido> lista = new ArrayList<Pedido>();
+	
+	
+	PedidoControl peControl = new PedidoControl();
+
+	
+	ConexaoBR conexao;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Salao_Menu frame = new Salao_Menu();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Salao_Menu() {
+		setExtendedState(Frame.MAXIMIZED_BOTH);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 1371, 742);
+		contentpanelMenu = new JPanel();
+		contentpanelMenu.setBackground(Color.WHITE);
+		contentpanelMenu.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentpanelMenu);
+		contentpanelMenu.setLayout(null);
+		
+		JPanel barra = new JPanel();
+		barra.setLayout(null);
+		barra.setEnabled(false);
+		barra.setBackground(new Color(128, 0, 0));
+		barra.setBounds(-394, 0, 1762, 56);
+		contentpanelMenu.add(barra);
+		
+		cardapio = menu.restaurarPratos();
+		
+		JScrollPane scrollMenu = new JScrollPane(cardapio);
+		scrollMenu.setBackground(new Color(255, 255, 255));
+		scrollMenu.setBounds(10, 67, 816, 545);
+		contentpanelMenu.add(scrollMenu);
+		
+		JPanel panelPedido = new JPanel();
+		panelPedido.setToolTipText("Verifique os detalhes do seu pedido");
+		panelPedido.setBorder(new LineBorder(new Color(128, 0, 0), 1, true));
+		panelPedido.setBackground(new Color(255, 255, 255));
+		panelPedido.setBounds(836, 67, 509, 625);
+		contentpanelMenu.add(panelPedido);
+		panelPedido.setLayout(null);
+		
+		JPanel panelTitulo = new JPanel();
+		panelTitulo.setBackground(new Color(128, 0, 0));
+		panelTitulo.setBounds(114, 63, 300, 3);
+		panelPedido.add(panelTitulo);
+		panelTitulo.setLayout(null);
+		
+		JLabel lblTitulo = new JLabel("Pedido");
+		lblTitulo.setToolTipText("");
+		lblTitulo.setForeground(new Color(128, 0, 0));
+		lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitulo.setHorizontalTextPosition(SwingConstants.CENTER);
+		lblTitulo.setFont(new Font("Times New Roman", Font.BOLD, 25));
+		lblTitulo.setBounds(213, 30, 99, 21);
+		panelPedido.add(lblTitulo);
+		
+		JLabel lblPrato = new JLabel("Prato:");
+		lblPrato.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		lblPrato.setBounds(34, 126, 82, 21);
+		panelPedido.add(lblPrato);
+		
+		JLabel lblPreo = new JLabel("Pre\u00E7o:");
+		lblPreo.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		lblPreo.setBounds(34, 217, 62, 21);
+		panelPedido.add(lblPreo);
+		
+		lblNomeDoPrato = new JLabel();
+		lblNomeDoPrato.setBorder(null);
+		lblNomeDoPrato.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		lblNomeDoPrato.setBounds(33, 158, 245, 32);
+		panelPedido.add(lblNomeDoPrato);
+		
+		lblNomeDoPrato_1 = new JLabel();
+		lblNomeDoPrato_1.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		lblNomeDoPrato_1.setBorder(null);
+		lblNomeDoPrato_1.setBounds(34, 249, 244, 32);
+		panelPedido.add(lblNomeDoPrato_1);
+		
+		lblQnt = new JLabel("Quantidade:");
+		lblQnt.setHorizontalTextPosition(SwingConstants.CENTER);
+		lblQnt.setHorizontalAlignment(SwingConstants.LEFT);
+		lblQnt.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		lblQnt.setBounds(34, 330, 99, 21);
+		
+		panelPedido.add(lblQnt);
+		
+		lblQuantidadeProd = new JLabel();
+		lblQuantidadeProd.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		lblQuantidadeProd.setBorder(null);
+		lblQuantidadeProd.setBounds(135, 325, 39, 32);
+		panelPedido.add(lblQuantidadeProd);
+		
+		JButton btnAdd = new JButton("Adicionar");
+		btnAdd.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		btnAdd.setToolTipText("Clique para aumentar a quantidade deste prato");
+		btnAdd.setBounds(321, 325, 93, 32);
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+					if (nomeP == null) {
+					
+					JOptionPane.showMessageDialog(null, "Nenhum prato foi selecionado!");
+					
+				
+					}else {
+					
+					
+					qnt++;
+					
+					p = cardapio.getSelectedValue();
+					
+					String v = p.getPrice();
+					
+					preco = Double.parseDouble(v);
+					
+					total = preco*qnt;
+					
+					totalP = Double.toString(total);
+					
+					qntS = Integer.toString(qnt);
+					
+					lblQuantidadeProd.setText(qntS);
+					lblNomeDoPrato_1.setText(totalP);
+				}}
+			});
+		panelPedido.add(btnAdd);
+		
+		JButton btnDiminuir = new JButton("Diminuir");
+		btnDiminuir.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		btnDiminuir.setToolTipText("Clique para diminuir a quantidade deste prato");
+		btnDiminuir.setBounds(199, 325, 93, 32);
+		btnDiminuir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if (nomeP == null) {
+					
+					JOptionPane.showMessageDialog(null, "Nenhum prato foi selecionado!");
+					
+				} else if (qnt >= 1) {
+					
+					
+					String v = lblNomeDoPrato_1.getText();
+					
+					totalPedido = Double.parseDouble(v);
+					
+					p = cardapio.getSelectedValue();
+					
+					String x = p.getPrice();
+					
+					preco = Double.parseDouble(x);
+					
+					total = preco*qnt;
+					
+					total = total-preco;
+					
+					totalP = Double.toString(total);
+					
+					qnt--;
+					qntS = Integer.toString(qnt);
+					
+					lblQuantidadeProd.setText(qntS);
+					lblNomeDoPrato_1.setText(totalP);
+					
+					
+				}}});
+		
+		panelPedido.add(btnAdd);
+		panelPedido.add(btnDiminuir);
+		
+		JLabel lblObs = new JLabel("Observa\u00E7\u00E3o:");
+		lblObs.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		lblObs.setBounds(34, 395, 115, 21);
+		panelPedido.add(lblObs);
+		
+		textField = new JTextField();
+		textField.setBorder(new LineBorder(new Color(0, 0, 0)));
+		textField.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+		textField.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		textField.setToolTipText("Escreva uma observa\u00E7\u00E3o para a cozinha caso necess\u00E1rio");
+		textField.setBounds(34, 427, 439, 78);
+		panelPedido.add(textField);
+		textField.setColumns(10);
+		
+		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.setToolTipText("Clique para adicionar o pedido ao carrinho");
+		btnCancelar.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		btnCancelar.setBounds(140, 558, 93, 32);
+		panelPedido.add(btnCancelar);
+		
+		JButton btnFinalizar = new JButton("Adicionar");
+		btnFinalizar.setToolTipText("Clique para adicionar o pedido ao carrinho");
+		btnFinalizar.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		btnFinalizar.setBounds(278, 558, 93, 32);
+		btnFinalizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+				      prato = cardapio.getSelectedValue();
+				      qntPedido = Integer.toString(qnt);
+				      prato.setQnt(qntPedido);
+				      prato.setPrice(lblNomeDoPrato_1.getText());
+				      String totalDemanda = prato.getPrice();
+				      valor = Double.parseDouble(totalDemanda);
+				      totalFinal = totalFinal + valor;
+				      nomeP = prato.getName();
+				      descricao = prato.getDescription();
+				      String b = lblNomeDoPrato_1.getText();
+				      price = Double.parseDouble(b);
+				      nome_usuario = Entrada_Usuario.usuario.nome;
+				      mesa_usuario = Entrada_Usuario.usuario.mesa;
+				      observacao = textField.getText();
+				      pedido = new Pedido (nome_usuario, nomeP, qntPedido, mesa_usuario, observacao);
+				      lista.add(pedido);
+				      peControl.InserirPedido(nome_usuario, nomeP, qntPedido, mesa_usuario, observacao);
+				      model.addElement(prato);
+				      qnt = 0;
+				      cardapio.clearSelection();
+					}});
+		
+		panelPedido.add(btnFinalizar);
+		
+		JButton btnVoltar = new JButton("Voltar");
+		btnVoltar.setToolTipText("Clique para voltar a tela anterior");
+		btnVoltar.setBackground(new Color(255, 255, 255));
+		btnVoltar.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		btnVoltar.setBounds(244, 638, 114, 47);
+		contentpanelMenu.add(btnVoltar);
+		
+		JButton btnContinuar = new JButton("Continuar");
+		btnContinuar.setToolTipText("Clique para visualizar o carrinho");
+		btnContinuar.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		btnContinuar.setBackground(Color.WHITE);
+		btnContinuar.setBounds(479, 638, 114, 47);
+		btnContinuar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Carrinho c = new Carrinho();
+				c.setVisible(true);
+					dispose();
+				}
+			});
+		contentpanelMenu.add(btnContinuar);
+		
+		 cardapio.addMouseListener(new MouseAdapter() {
+	         public void mouseClicked(MouseEvent me) {
+	            if (me.getClickCount() == 2) {
+	               JList target = (JList)me.getSource();
+	               int index = target.locationToIndex(me.getPoint());
+	               if (index >= 0) {
+	                  Prato item = (Prato) target.getModel().getElementAt(index);
+	                  nomeP = item.getName();
+	                  lblNomeDoPrato.setText(nomeP);
+	          		  precoP = item.getPrice();
+	          		  lblNomeDoPrato_1.setText(precoP);
+	          		  lblQuantidadeProd.setText("0");
+	               
+	               }
+	            }
+	         }
+	      });
+		
+		
+	}
+}
