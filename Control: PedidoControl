@@ -1,0 +1,113 @@
+package Control;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JOptionPane;
+
+import com.mysql.jdbc.Statement;
+
+import DAO.ConexaoBR;
+
+import telas.Pedido;
+
+public class PedidoControl {
+	ConexaoBR banco2 = new ConexaoBR();
+	String retorno = "erro";
+	Connection ExConn;
+	PreparedStatement pstm;
+	ResultSet rs;
+	ArrayList<Pedido> lista = new ArrayList<Pedido>();
+	Pedido pedido;
+	
+	
+	public String InserirPedido(String cliente, String pedido, String qnt,  String numMesa,  String obs ) {
+		try {
+			ExConn = (Connection) banco2.abrirBDConn1();
+			Statement stmt = (Statement) ExConn.createStatement();
+			String sSQL = "INSERT INTO projetoBR.Pedido VALUES ('"+cliente+"', '"+pedido+"', '"+qnt+"', '"+numMesa+"', '"+obs+"')";
+			System.out.println(sSQL);
+			boolean res = stmt.execute(sSQL);
+			
+			JOptionPane.showMessageDialog(null, (!res)?"Pedido registrado!":""+"Pedido não registrado!");
+			stmt.close();
+			banco2.FecharBDConn1();
+			
+		}catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Pedido não registrado!");
+		}
+		return retorno;
+}
+	public List<Pedido> listarPrato() throws SQLException {
+		
+		ExConn = (Connection) banco2.abrirBDConn1();
+		String sql = "SELECT * FROM Pedido";
+		
+		try {
+			
+			pstm = ExConn.prepareStatement(sql);
+			rs = pstm.executeQuery();
+			
+			while (rs.next()) {
+				
+				Pedido pedido = new Pedido();
+				pedido.setCliente(rs.getString("cliente"));
+				pedido.setPedido(rs.getString("pedido"));
+				pedido.setQnt(rs.getString("qnt"));
+				pedido.setMesa(rs.getString("numMesa"));
+				pedido.setObs(rs.getNString("obs"));
+				
+				lista.add(pedido);
+			}
+			
+		}
+		
+		catch (SQLException e) {
+			
+			JOptionPane.showMessageDialog(null, "Listar Pedido : " + e);
+		}
+		
+		return lista;
+		
+	}
+	
+	public String RemoverPedido(String cliente) {
+		try {
+			ExConn = (Connection) banco2.abrirBDConn1();
+			Statement stmt = (Statement) ExConn.createStatement();
+			String sSQL = "DELETE FROM Pedido WHERE cliente = ('"+cliente+"')";
+			System.out.println(sSQL);
+			boolean res = stmt.execute(sSQL);
+			
+			JOptionPane.showMessageDialog(null, (!res)?"Pedido removido!":""+"Pedido não removido!");
+			stmt.close();
+			banco2.FecharBDConn1();
+			
+		}catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Pedido não removido! ERROR : " + e);
+		}
+		return retorno;
+	}
+	
+	public String RemoverPedido(String pedido, String cliente) {
+		try {
+			ExConn = (Connection) banco2.abrirBDConn1();
+			Statement stmt = (Statement) ExConn.createStatement();
+			String sSQL = "DELETE FROM Pedido WHERE cliente = ('"+cliente+"') AND pedido =  ('"+pedido+"')";
+			System.out.println(sSQL);
+			boolean res = stmt.execute(sSQL);
+			
+			JOptionPane.showMessageDialog(null, (!res)?"Pedido removido!":""+"Pedido não removido!");
+			stmt.close();
+			banco2.FecharBDConn1();
+			
+		}catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Pedido não removido! ERROR : " + e);
+		}
+		return retorno;
+	}
+}
