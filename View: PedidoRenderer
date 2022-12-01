@@ -1,0 +1,124 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.ListCellRenderer;
+import javax.swing.border.EmptyBorder;
+
+public class PedidoRenderer extends JPanel implements ListCellRenderer<Prato> {
+
+	private JLabel lbIcon = new JLabel();
+	private JLabel lbName = new JLabel();
+	private JLabel lbDescription = new JLabel();
+	private JLabel lbPrice = new JLabel();
+	private JLabel lbRS = new JLabel("R$ : ");
+	private JLabel lbSpace = new JLabel("          ");
+	private JLabel lbQnt = new JLabel("Qnt :  ");
+	private JLabel lbQntP = new JLabel();
+	private int p;
+	public String q;
+	private JPanel panelText;
+	private JPanel panelIcon;
+	private JPanel panelPrice;
+	private JPanel panelQnt;
+	private JPanel panelEast;
+	private JButton plus = new JButton("+");
+	private JButton minus = new JButton("-");
+	public ActionEvent e;
+
+	public PedidoRenderer() {
+		
+		//q = Integer.toString(p);
+		//lbQntP.setText(q);
+		
+		setLayout(new BorderLayout(5, 5));
+	
+		panelText = new JPanel(new GridLayout(0, 1));
+		panelText.add(lbName);
+		panelText.add(lbDescription);
+		
+		panelIcon = new JPanel();
+		panelIcon.setBorder(new EmptyBorder(5, 5, 5, 5));
+		panelIcon.add(lbIcon);
+		
+		
+		panelPrice = new JPanel();
+		panelPrice.setBackground(new Color(255,255,255));
+		panelPrice.add(lbRS);
+		panelPrice.add(lbPrice);
+		panelPrice.add(lbSpace);
+		
+		panelQnt = new JPanel();
+		panelQnt.setBackground(new Color(255,255,255));
+		panelQnt.add(lbQnt);
+		panelQnt.add(lbQntP);
+		
+		panelEast = new JPanel(new GridLayout(0, 1));
+		panelEast.setBackground(new Color(255,255,255));
+		panelEast.add(panelPrice);
+		panelEast.add(panelQnt);
+		
+
+		add(panelIcon, BorderLayout.WEST);
+		add(panelText, BorderLayout.CENTER);
+		add(panelEast, BorderLayout.EAST);
+
+	}
+
+	@Override
+	public Component getListCellRendererComponent(JList<? extends Prato> list,
+			Prato prato, int index, boolean isSelected, boolean cellHasFocus) {
+
+		lbIcon.setIcon(new ImageIcon(getClass().getResource(
+				"/telas/icone_prato.jpg")));
+		lbName.setText(prato.getName());
+		lbName.setForeground(Color.black);
+		lbDescription.setText(prato.getDescription());
+		lbPrice.setText(prato.getPrice());
+		lbQntP.setText(prato.getQnt());
+		lbName.setOpaque(true);
+		lbDescription.setOpaque(true);
+		lbIcon.setOpaque(true);
+		lbPrice.setOpaque(true);
+		lbRS.setOpaque(true);
+		lbQnt.setOpaque(true);
+		lbQntP.setOpaque(true);
+		
+		if (isSelected) {
+			lbName.setBackground(list.getSelectionBackground());
+			lbDescription.setBackground(list.getSelectionBackground());
+			lbIcon.setBackground(list.getSelectionBackground());
+			lbPrice.setBackground(list.getSelectionBackground());
+			lbRS.setBackground(list.getSelectionBackground());
+			lbQnt.setBackground(list.getSelectionBackground());
+			lbQntP.setBackground(list.getSelectionBackground());
+			panelPrice.setBackground(list.getSelectionBackground());
+			panelEast.setBackground(list.getSelectionBackground());
+			setBackground(list.getSelectionBackground());
+			panelIcon.setBackground(list.getSelectionBackground());
+			System.out.println(plus.getBounds());
+			System.out.println(minus.getBounds());
+			
+		} else {
+			lbName.setBackground(list.getBackground());
+			lbDescription.setBackground(list.getBackground());
+			lbIcon.setBackground(list.getBackground());
+			lbQnt.setBackground(list.getBackground());
+			lbQntP.setBackground(list.getBackground());
+			lbPrice.setBackground(list.getBackground());
+			lbRS.setBackground(list.getBackground());
+			panelPrice.setBackground(list.getBackground());
+			panelEast.setBackground(list.getBackground());
+			setBackground(list.getBackground());
+			panelIcon.setBackground(list.getBackground());
+		}
+		return this;
+	}
+}
