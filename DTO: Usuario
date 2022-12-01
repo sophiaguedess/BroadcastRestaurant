@@ -1,0 +1,28 @@
+public class Usuario {
+	public String nome;
+	public String mesa;
+	
+	public Usuario(String nome, String mesa) {
+		this.nome = nome;
+		this.mesa = mesa;
+	}
+	
+	public Usuario() {
+		super();
+	}
+	
+	
+	public String getNome() {
+		return nome;
+	}
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+	public String getMesa() {
+		return mesa;
+	}
+	public void setMesa(String mesa) {
+		this.mesa = mesa;
+	}
+
+}
