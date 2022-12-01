@@ -1,5 +1,9 @@
+package Control;
+
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 import com.mysql.jdbc.Statement;
@@ -7,12 +11,35 @@ import DAO.ConexaoBR;
 import telas.Prato;
 
 public class PratoControl {
-	public String InserirPrato(String name, String description) {
-		ConexaoBR banco2 = new ConexaoBR();
-		String retorno = "erro";
+	ConexaoBR banco2 = new ConexaoBR();
+	String retorno = "erro";
+	Connection ExConn;
+	PreparedStatement pstm;
+	
+	public String InserirPrato(String name, String description, double price) {
+	
 		
 		try {
-			Connection ExConn = (Connection) banco2.abrirBDConn1();
+			ExConn = (Connection) banco2.abrirBDConn1();
+			Statement stmt = (Statement) ExConn.createStatement();
+			String sSQL = "INSERT INTO projetoBR.Prato VALUES ('"+name+"', '"+description+"', '"+price+"')";
+			System.out.println(sSQL);
+			boolean res = stmt.execute(sSQL);
+			
+			JOptionPane.showMessageDialog(null, (!res)?"Prato registrado!":""+"Prato não registrado!");
+			stmt.close();
+			banco2.FecharBDConn1();
+			
+		}catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Prato não registrado!");
+		}
+		return retorno;
+}
+	public String InserirPrato(String name, String description) {
+	
+		
+		try {
+			ExConn = (Connection) banco2.abrirBDConn1();
 			Statement stmt = (Statement) ExConn.createStatement();
 			String sSQL = "INSERT INTO projetoBR.Prato VALUES ('"+name+"', '"+description+"')";
 			System.out.println(sSQL);
@@ -27,4 +54,37 @@ public class PratoControl {
 		}
 		return retorno;
 }
+	
+	public ResultSet listarPrato() throws SQLException {
+		
+		ExConn = (Connection) banco2.abrirBDConn1();
+		String sql = "SELECT * FROM Prato";
+		
+		try {
+			pstm = ExConn.prepareStatement(sql);
+			return pstm.executeQuery();
+		}catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return null;
+		}
+		
+	}
+	
+	public String RemoverPrato(String nome) {
+		try {
+			ExConn = (Connection) banco2.abrirBDConn1();
+			Statement stmt = (Statement) ExConn.createStatement();
+			String sSQL = "DELETE FROM Prato WHERE nome = ('"+nome+"')";
+			System.out.println(sSQL);
+			boolean res = stmt.execute(sSQL);
+			
+			JOptionPane.showMessageDialog(null, (!res)?"Pedido removido!":""+"Pedido não removido!");
+			stmt.close();
+			banco2.FecharBDConn1();
+			
+		}catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Pedido não removido! ERROR : " + e);
+		}
+		return retorno;
+	}
 }
