@@ -1,3 +1,5 @@
+package telas;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -38,6 +40,7 @@ public class Entrada_Usuario extends JFrame {
 	private JTextField campoNome;
 	private JTextField campoNumMesa;
 	private JTextField campoMesa;
+	public static Usuario usuario = new Usuario();
 	
 	ClienteControl ClieControl = new ClienteControl();
 
@@ -75,15 +78,22 @@ public class Entrada_Usuario extends JFrame {
 		label_1.setBounds(1, 1, 451, 140);
 		contentPane.add(label_1);
 		
+		JPanel barra = new JPanel();
+		barra.setLayout(null);
+		barra.setEnabled(false);
+		barra.setBackground(new Color(128, 0, 0));
+		barra.setBounds(-394, 0, 1762, 56);
+		contentPane.add(barra);
+		
 		JLabel lblNewLabel_1 = new JLabel("Antes de iniciar seu pedido, por favor insira:");
-		lblNewLabel_1.setBounds(452, 93, 451, 140);
+		lblNewLabel_1.setBounds(452, 113, 451, 140);
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		contentPane.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel = new JLabel("Bem-Vindo!");
 		lblNewLabel.setForeground(new Color(128, 0, 0));
-		lblNewLabel.setBounds(452, 33, 451, 140);
+		lblNewLabel.setBounds(452, 63, 451, 140);
 		lblNewLabel.setVerifyInputWhenFocusTarget(false);
 		lblNewLabel.setRequestFocusEnabled(false);
 		lblNewLabel.setInheritsPopupMenu(false);
@@ -110,11 +120,9 @@ public class Entrada_Usuario extends JFrame {
 		btnContinuar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				Usuario usuario = new Usuario();
-				
-				SALAO salao = new SALAO();
+				Salao_Menu salao = new Salao_Menu();
 				salao.setVisible(true);
-				dispose();
+				//dispose();
 				
 			}
 		});
@@ -165,8 +173,6 @@ public class Entrada_Usuario extends JFrame {
 		btnVoltar.setBackground(new Color(255, 255, 255));
 		btnVoltar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Alternar_Tela alternar_tela = new Alternar_Tela();
-				alternar_tela.setVisible(true);
 				dispose();
 			}
 		});
@@ -186,9 +192,9 @@ public class Entrada_Usuario extends JFrame {
 				String nome = campoNome.getText();
 				String situacao = campoMesa.getText();
 				String numMesa = campoNumMesa.getText();
-				
 				ClieControl.InserirDados(nome, situacao, numMesa);
-				
+				usuario.nome = nome;
+				usuario.mesa = numMesa;
 			}
 		});
 		btnRegistrar.setFont(new Font("Times New Roman", Font.PLAIN, 14));
