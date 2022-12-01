@@ -1,0 +1,58 @@
+public class Pedido {
+	String cliente, pedido, qnt, mesa, obs;
+
+	public String getQnt() {
+		return qnt;
+	}
+
+	public void setQnt(String qnt) {
+		this.qnt = qnt;
+	}
+
+	public String getObs() {
+		return obs;
+	}
+
+	public void setObs(String obs) {
+		this.obs = obs;
+	}
+
+	public Pedido(String cliente, String pedido, String qnt, String mesa, String obs) {
+		super();
+		this.cliente = cliente;
+		this.pedido = pedido;
+		this.mesa = mesa;
+		this.obs = obs;
+		this.qnt = qnt;
+	}
+
+	public Pedido() {
+		super();
+	}
+
+	public String getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(String cliente) {
+		this.cliente = cliente;
+	}
+
+	public String getPedido() {
+		return pedido;
+	}
+
+	public void setPedido(String pedido) {
+		this.pedido = pedido;
+	}
+
+	public String getMesa() {
+		return mesa;
+	}
+
+	public void setMesa(String mesa) {
+		this.mesa = mesa;
+	}
+	
+
+}
