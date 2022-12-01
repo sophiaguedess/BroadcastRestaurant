@@ -1,0 +1,71 @@
+public class Prato {
+	private String name;
+	private String description;
+	private String iconName;
+	private String price;
+	private String qnt;
+
+	public String getQnt() {
+		return qnt;
+	}
+
+	public void setQnt(String qnt) {
+		this.qnt = qnt;
+	}
+
+	public String getPrice() {
+		return price;
+	}
+
+	public void setPrice(String price) {
+		this.price = price;
+	}
+
+	public Prato(String name, String description, String iconName, String price) {
+		super();
+		this.name = name;
+		this.description = description;
+		this.iconName = iconName;
+		this.price = price;
+	}
+	
+	public Prato(String name, String description, String iconName) {
+		super();
+		this.name = name;
+		this.description = description;
+		this.iconName = iconName;
+	}
+
+	public Prato() {
+		super();
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getIconName() {
+		return iconName;
+	}
+
+	public void setIconName(String iconName) {
+		this.iconName = iconName;
+	}
+
+	@Override
+	public String toString() {
+		return name + " - " + description;
+	}
+}
